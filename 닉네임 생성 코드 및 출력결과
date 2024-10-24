@@ -1,0 +1,203 @@
+import torch
+import torch.nn as nn
+import torchvision.models as models
+from torchvision import transforms
+from PIL import Image
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+import random
+import cv2  # OpenCV 사용
+import pandas as pd
+import csv
+import matplotlib.font_manager as fm
+
+plt.rcParams['font.family'] ='Malgun Gothic'
+plt.rcParams['axes.unicode_minus'] =False
+
+
+
+def read_csv_file(file_path):
+    columns = []
+    with open(file_path, 'r', newline='') as csvfile:
+        csvreader = csv.reader(csvfile)
+        columns = zip(*csvreader)
+        columns = [list(column) for column in columns]
+    return columns
+
+# CSV 파일 경로
+file_path = r"C:\Users\SYU\Project\item.csv"
+
+# CSV 파일 읽기
+data = read_csv_file(file_path)
+
+# 결과 출력
+
+# 각 열을 변수로 할당
+dog_list = data[0]
+cat_list = data[1]
+dino_list = data[2]
+fox_list = data[3]
+monkey_list = data[4]
+rabbit_list = data[5]
+horse_list = data[6]
+snake_list = data[7]
+deer_list = data[8]
+
+import csv
+
+# CSV 파일 경로
+file_path2 = r"C:\Users\SYU\Project\emotion.csv"
+
+# CSV 파일 읽기
+data2 = read_csv_file(file_path2)
+
+# 각 열을 변수로 할당
+angry_list=data2[0]
+disgust_list=data2[1]
+fear_list=data2[2]
+happy_list=data2[3]
+sad_list=data2[4]
+surprise_list=data2[5]
+neutral_list=data2[6]
+
+# 모델을 불러옵니다.
+model_path = r'C:\Users\SYU\Project\resnet34.pth'  # 모델 파일 경로
+
+# 클래스 이름 설정
+class_names = ['dog', 'cat', 'dinosaur', 'horse', 'snake', 'deer', 'fox', 'monkey', 'rabbit']
+
+
+if os.path.exists(model_path):
+    model = models.resnet34()  # 모델 인스턴스 생성
+    num_features = model.fc.in_features
+    model.fc = nn.Sequential(
+        nn.Linear(num_features, 256),
+        nn.ReLU(),
+        nn.Dropout(0.4),
+        nn.Linear(256, len(class_names)),
+        nn.LogSoftmax(dim=1)
+    )
+    model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+    model.eval()  # 평가 모드로 전환
+else:
+    print("모델 파일을 찾을 수 없습니다.")
+    exit()
+
+# 나머지 코드는 그대로 유지됩니다.
+# 얼굴 검출 함수
+def detect_face(image_path):
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    image = cv2.imread(image_path)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+
+    if len(faces) == 0:
+        print("얼굴을 찾을 수 없습니다.")
+        exit()
+
+    # 첫 번째 얼굴만 사용
+    (x, y, w, h) = faces[0]
+    face = image[y:y+h, x:x+w]
+
+    return face
+
+# 이미지 로드 및 얼굴 검출
+image_path = r'C:\Users\SYU\Project\prope.jpg'
+face_image = detect_face(image_path)
+
+# 얼굴 이미지를 PIL 이미지로 변환
+face_image = cv2.cvtColor(face_image, cv2.COLOR_BGR2RGB)
+face_image = Image.fromarray(face_image)
+
+# 이미지 전처리
+transforms_test = transforms.Compose([
+    transforms.Resize((224, 224)),  # 모델 입력 크기에 맞게 조정
+    transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+])
+image = transforms_test(face_image).unsqueeze(0)  # 배치 차원 추가
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+image = image.to(device)
+
+# 모델 예측
+model.eval()  # 평가 모드로 전환
+with torch.no_grad():
+    outputs = model(image)
+    _, preds = torch.max(outputs, 1)
+
+
+
+# 이미지와 예측 결과 표시
+def imshow(inp, title=None):
+    inp = inp.numpy().transpose((1, 2, 0))
+    mean = np.array([0.485, 0.456, 0.406])
+    std = np.array([0.229, 0.224, 0.225])
+    inp = std * inp + mean
+    inp = np.clip(inp, 0, 1)
+    plt.imshow(inp)
+    if title is not None:
+        plt.title(title)
+    plt.show()
+
+# 예측된 클래스에 따라 한글 라벨 선택
+if class_names[preds[0]] == 'dog':
+    random_item = random.choice(dog_list)
+elif class_names[preds[0]] == 'cat':
+    random_item = random.choice(cat_list)
+elif class_names[preds[0]] == 'dinosaur':
+    random_item = random.choice(dino_list)
+elif class_names[preds[0]] == 'horse':
+    random_item = random.choice(horse_list)
+elif class_names[preds[0]] == 'snake':
+    random_item = random.choice(snake_list)
+elif class_names[preds[0]] == 'deer':
+    random_item = random.choice(deer_list)
+elif class_names[preds[0]] == 'fox':
+    random_item = random.choice(fox_list)
+elif class_names[preds[0]] == 'monkey':
+    random_item = random.choice(monkey_list)
+else:
+    random_item = random.choice(rabbit_list)
+
+
+from deepface import DeepFace
+
+
+# 감정 분석 실행
+result = DeepFace.analyze(image_path, actions=['emotion'])
+# for i, class_name in enumerate(class_names):
+#     print(f"{class_name.capitalize()}: {torch.exp(outputs[0][i]) * 100:.2f}%")
+
+# 결과 출력
+emotion = result[0]["dominant_emotion"]
+probability = result[0]["emotion"][emotion]
+
+if emotion=='angry':
+    random_emotion = random.choice(angry_list[1:])
+elif emotion == 'disgust':
+    random_emotion = random.choice(disgust_list[1:])
+elif emotion == 'fear':
+    random_emotion = random.choice(fear_list[1:])
+elif emotion == 'happy':
+    random_emotion = random.choice(happy_list[1:])
+elif emotion == 'sad':
+    random_emotion = random.choice(sad_list[1:])
+elif emotion == 'surprise':
+    random_emotion = random.choice(surprise_list[1:])
+else:
+    random_emotion = random.choice(neutral_list[1:])
+
+# print("Emotion probabilities:")
+# for emotion, probability in result[0]["emotion"].items():
+#     print(f"{emotion.capitalize()}: {probability:.2f}%")
+
+imshow(image.cpu().squeeze(), title= random_emotion + ' ' + random_item)
+
+
+max_emotion = max(result[0]["emotion"].items(), key=lambda x: x[1])
+max_item = max([(class_names[i], torch.exp(outputs[0][i]).item()) for i in range(len(class_names))], key=lambda x: x[1])
+
+# 결과 출력
+print(f"감정: {max_emotion[0].capitalize()} ({max_emotion[1]:.2f}%)")
+print(f"동물: {max_item[0].capitalize()} ({max_item[1]*100:.2f}%)")

@@ -1,0 +1,88 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+import urllib.request
+import os
+
+star_list = ['이름','성 이']
+
+
+# 폴더 생성 함수
+def createFolder(dir):
+    try:
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+    except OSError as e:
+        print(f'Error: {e}')
+
+
+# 검색 쿼리
+for searchKey in star_list:
+    createFolder(f'train_dataset/{searchKey}')
+
+    chrome_options = Options()
+    # chrome_options.add_argument('--headless')  # 헤드리스 모드 설정
+    # chrome_options.add_argument('--no-sandbox')
+    # chrome_options.add_argument('--disable-dev-shm-usage')
+
+    driver = webdriver.Chrome(options=chrome_options)
+    driver.get('https://www.google.co.kr/imghp')
+
+    # 쿼리 검색 및 검색 버튼 클릭
+    elem = driver.find_element(By.NAME, 'q')
+    elem.send_keys(searchKey)
+    elem.send_keys(Keys.RETURN)
+
+    # 이미지 스크롤링
+    last_height = driver.execute_script("return document.body.scrollHeight")
+    while True:
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(3)
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            try:
+                more_button = WebDriverWait(driver, 5).until(
+                    EC.element_to_be_clickable((By.XPATH, '//*[@id="islmp"]/div/div/div/div/div[1]/div[2]/div[2]'))
+                )
+                more_button.click()
+                time.sleep(5)
+            except:
+                pass
+
+            if driver.find_element(By.CLASS_NAME, 'OuJzKb.Yu2Dnd').text == '더 이상 표시할 콘텐츠가 없습니다.':  # class 이름으로 가져오기
+                break
+        last_height = new_height
+
+    images = driver.find_elements(By.CSS_SELECTOR, ".rg_i.Q4LuWd")
+    count = 1
+    for image in images:
+        try:
+            if count <= 100:
+                image.click()
+                time.sleep(1)
+                img_url = WebDriverWait(driver, 5).until(
+                    EC.presence_of_element_located((By.XPATH,
+                                                    '//*[@id="Sva75c"]/div[2]/div[2]/div[2]/div[2]/c-wiz/div/div/div/div/div[3]/div[1]/a/img[1]'))
+                ).get_attribute("src")
+
+                if img_url.startswith('data:'):  # 데이터 URL 건너뛰기
+                    continue
+
+                img_url = img_url.replace('https', 'http')  # https로 요청할 경우 보안 문제로 SSL 에러가 발생할 수 있음
+                opener = urllib.request.build_opener()
+                opener.addheaders = [('User-Agent', 'Mozilla/5.0')]
+                urllib.request.install_opener(opener)
+                urllib.request.urlretrieve(img_url, f'train_dataset/{searchKey}/{searchKey}_{str(count)}.jpg')
+                count += 1
+                print(f'--{count}번째 이미지 저장 완료--')
+            else:
+                break
+        except Exception as e:
+            print(f'Error: {e}')
+            continue
+
+    driver.quit()

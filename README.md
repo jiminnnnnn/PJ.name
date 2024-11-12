@@ -30,8 +30,8 @@ Here are some ideas to get you started:
 	신지민
  	경민주
   	이지현
-### 3.역할분담
-	신지민 : 학습 데이터 수집, ai 모델 학습, ai 학습
+### 3.역할
+	학습 데이터 수집, ai 모델 학습, ai 학습
 <br/>
 <br/>
 

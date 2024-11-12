@@ -34,7 +34,8 @@ Here are some ideas to get you started:
 
 ## ⚡핵심기능
 ### 	1. selenium을 활용해 자료 수집 및 전처리
-![image](https://github.com/user-attachments/assets/815d8af7-ef76-4c3a-9cc5-b6ccd9a62b65)
+ㄱ![image](https://github.com/user-attachments/assets/1cea6779-e8dc-480a-ad40-c1da43531e64)
+
 
 ### 	2. ResNet-34 모델 학습
 ![image](https://github.com/user-attachments/assets/d5c0b2f3-07ca-49aa-a457-733f9e5511b2)
@@ -45,7 +46,8 @@ Here are some ideas to get you started:
 ### 	4. DeepFace를 활용해 얼굴의 감정 분석
 
 ### 	5. 얼굴형과 감정에 맞는 단어들을 임의로 선정
-   
+   ![ㅁㄴㅇㅁㅁㅁ](https://github.com/user-attachments/assets/019b87f7-eb16-470d-a88c-6f25448cca28)
+
 ## ⚡핵심기능
 ### 	1.참고 사이트
 <https://www.notion.so/be6863e600af4dab8491a1a9cf98c165>

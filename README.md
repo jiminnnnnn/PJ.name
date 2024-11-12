@@ -34,9 +34,16 @@ Here are some ideas to get you started:
 
 ## ⚡핵심기능
 ### 	1. selenium을 활용해 자료 수집 및 전처리
+![image](https://github.com/user-attachments/assets/815d8af7-ef76-4c3a-9cc5-b6ccd9a62b65)
+
 ### 	2. ResNet-34 모델 학습
+![image](https://github.com/user-attachments/assets/d5c0b2f3-07ca-49aa-a457-733f9e5511b2)
+
+
 ###  	3. OpenCV를 활용한 얼굴 인식
+
 ### 	4. DeepFace를 활용해 얼굴의 감정 분석
+
 ### 	5. 얼굴형과 감정에 맞는 단어들을 임의로 선정
    
 ## ⚡핵심기능

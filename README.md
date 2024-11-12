@@ -20,7 +20,7 @@ Here are some ideas to get you started:
 딥러닝을 활용해 얼굴 인식 및 닉네임 생성 ai 제작
 <br/>
 
-[![image](https://github.com/user-attachments/assets/6bf8ca0d-c0ef-4d2a-ad6c-d59a2f93473d)](<https://github.com/jiminnnnnn/PJ.name>)
+[![image](https://github.com/user-attachments/assets/6bf8ca0d-c0ef-4d2a-ad6c-d59a2f93473d)]()
 <br/>
 
 ## 🌱 프로젝트 정보

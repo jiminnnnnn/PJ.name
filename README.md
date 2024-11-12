@@ -45,7 +45,7 @@ Here are some ideas to get you started:
 
 ## ⚡핵심기능
 ### 	1. selenium을 활용해 자료 수집 및 전처리
-ㄱ![image](https://github.com/user-attachments/assets/1cea6779-e8dc-480a-ad40-c1da43531e64)
+![image](https://github.com/user-attachments/assets/1cea6779-e8dc-480a-ad40-c1da43531e64)
 
 
 ### 	2. ResNet-34 모델 학습

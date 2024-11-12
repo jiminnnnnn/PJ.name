@@ -31,11 +31,11 @@ Here are some ideas to get you started:
 
 ## ⚡사용기술
 ### 	스킬 : 
-	프로그래밍 언어: Python 
- 	딥러닝 및 머신러닝: ResNet-34, DeepFace 
-  	컴퓨터 비전: OpenCV 데이터 수집 및 
-   	크롤링: Selenium AI 
-	모델 학습: 이미지 전처리, 데이터 증강, 모델 훈련 및 평가
+#### 프로그래밍 언어: Python 
+#### 딥러닝 및 머신러닝: ResNet-34, DeepFace 
+#### 컴퓨터 비전: OpenCV 데이터 수집 및 
+#### 크롤링: Selenium AI 
+#### 모델 학습: 이미지 전처리, 데이터 증강, 모델 훈련 및 평가
 
 ## ⚡핵심기능
 ### 	1. selenium을 활용해 자료 수집 및 전처리

@@ -50,7 +50,7 @@ Here are some ideas to get you started:
 ![image](https://github.com/user-attachments/assets/1cea6779-e8dc-480a-ad40-c1da43531e64)
 
 
-### 	2. ResNet-34 모델 학습
+#### 	2. ResNet-34 모델 학습
 ![image](https://github.com/user-attachments/assets/d5c0b2f3-07ca-49aa-a457-733f9e5511b2)
 
 
